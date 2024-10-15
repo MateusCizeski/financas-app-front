@@ -21,23 +21,21 @@ function AuthProvider({ children }){
 
       if(storageUser){
 
-        const response = await api.get('/me', {
+        const response = await api.get({
           headers:{
-            'Authorization': `Bearer ${storageUser}`
+            'Authorization': `${storageUser}`
           }
         })
         .catch(()=>{
           setUser(null);
         })
 
-        api.defaults.headers['Authorization'] = `Bearer ${storageUser}`;
+        api.defaults.headers['Authorization'] = `${storageUser}`;
         setUser(response.data);
         setLoading(false);
 
       }
-
       setLoading(false);
-
     }
 
     loadStorage();
@@ -48,7 +46,7 @@ function AuthProvider({ children }){
     setLoadingAuth(true);
 
     try{
-      const response = await api.post('/users', {
+      const response = await api.post('/User', {
        name: nome,
        password: password,
        email: email,
@@ -68,7 +66,7 @@ function AuthProvider({ children }){
     setLoadingAuth(true);
 
     try{
-      const response = await api.post('/login', {
+      const response = await api.post('/User/login', {
         email: email,
         password: password
       })
@@ -84,7 +82,7 @@ function AuthProvider({ children }){
 
       await AsyncStorage.setItem('@finToken', token);
 
-      api.defaults.headers['Authorization'] = `Bearer ${token}`;
+      api.defaults.headers['Authorization'] = `${token}`;
 
       setUser({
         id,
