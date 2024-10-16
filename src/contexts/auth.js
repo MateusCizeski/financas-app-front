@@ -46,7 +46,7 @@ function AuthProvider({ children }){
     setLoadingAuth(true);
 
     try{
-      const response = await api.post('/User', {
+      const response = await api.post('api/User', {
        name: nome,
        password: password,
        email: email,
@@ -69,7 +69,7 @@ function AuthProvider({ children }){
       const response = await api.post('/User/login', {
         email: email,
         password: password
-      })
+      });
 
       const { id, name, token } = response.data;
 
