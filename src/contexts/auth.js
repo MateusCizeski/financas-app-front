@@ -20,7 +20,6 @@ function AuthProvider({ children }){
       const storageUser = await AsyncStorage.getItem('@finToken');
 
       if(storageUser){
-
         const response = await api.get({
           headers:{
             'Authorization': `${storageUser}`
@@ -31,7 +30,9 @@ function AuthProvider({ children }){
         })
 
         api.defaults.headers['Authorization'] = `${storageUser}`;
-        setUser(response.data);
+        if(response) {
+          setUser(response.data);
+        }
         setLoading(false);
 
       }
@@ -66,29 +67,29 @@ function AuthProvider({ children }){
     setLoadingAuth(true);
 
     try{
-      const response = await api.post('/User/login', {
+      const response = await api.post('api/User/login', {
         email: email,
         password: password
       });
 
-      const { id, name, token } = response.data;
+      const { Id, Name, Token } = response.data;
 
       const data = {
-        id,
-        name,
-        token,
+        id: Id,
+        name: Name,
+        token: Token,
         email,
       };
 
-      await AsyncStorage.setItem('@finToken', token);
+      await AsyncStorage.setItem('@finToken', Token);
 
-      api.defaults.headers['Authorization'] = `${token}`;
+      api.defaults.headers['Authorization'] = `${Token}`;
 
       setUser({
-        id,
-        name,
+        Id,
+        Name,
         email,
-      })
+      });
 
       setLoadingAuth(false);
 

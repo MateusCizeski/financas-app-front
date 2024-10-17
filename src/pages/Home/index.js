@@ -21,6 +21,7 @@ import HistoricoList from '../../components/HistoricoList';
 import CalendarModal from '../../components/CalendarModal'
 
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Home(){
@@ -40,10 +41,14 @@ export default function Home(){
       let date = new Date(dateMovements)
       let onlyDate = date.valueOf() + date.getTimezoneOffset() * 60 * 1000;
       let dateFormated = format(onlyDate, 'dd/MM/yyyy');
+      const storageUser = await AsyncStorage.getItem('@finToken');
 
-      const receives = await api.get('/receives', {
+      const receives = await api.get('api/Receive', {
         params:{
           date: dateFormated
+        },
+        headers:{
+          'Authorization': `${storageUser}`
         }
       })
 
@@ -66,16 +71,11 @@ export default function Home(){
   }, [isFocused, dateMovements])
 
 
-  async function handleDelete(id){
-    try{
-      await api.delete('/receives/delete', {
-        params:{
-          item_id: id
-        }
-      })
-
-      setDateMovements(new Date())
-    }catch(err){
+  async function handleDelete(id) {
+    try {
+      await api.delete(`api/Receive/${id}`);
+      setDateMovements(new Date());
+    } catch (err) {
       console.log(err);
     }
   }
