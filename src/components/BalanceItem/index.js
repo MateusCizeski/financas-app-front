@@ -4,12 +4,12 @@ import { Container, Label, Balance } from './styles';
 export default function BalanceItem({ data }){
 
   const labelName = useMemo(() => {
-    if(data.tag === 'saldo'){
+    if(data.tag === 'Saldo'){
       return{
         label: 'Saldo atual',
         color: '3b3dbf'
       }
-    }else if(data.tag === 'receita'){
+    }else if(data.tag === 'Receita'){
       return{
         label: 'Entradas de hoje',
         color: '00b94a'
