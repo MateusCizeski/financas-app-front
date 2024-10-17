@@ -29,7 +29,7 @@ export default function Home(){
   const [listBalance, setListBalance] = useState([]);
   const [movements, setMovements] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-
+  const { user } = useContext(AuthContext);
   const [dateMovements, setDateMovements] = useState(new Date())
 
 
@@ -45,16 +45,18 @@ export default function Home(){
 
       const receives = await api.get('api/Receive', {
         params:{
-          date: dateFormated
+          date: dateFormated,
+          userId: user.id
         },
         headers:{
-          'Authorization': `${storageUser}`
+          'Authorization': `Bearer ${storageUser}`
         }
       })
 
-      const balance = await api.get('/balance', {
+      const balance = await api.get('api/User', {
         params:{
-          date: dateFormated 
+          date: dateFormated,
+          userId: user.id 
         }
       })
 

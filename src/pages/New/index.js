@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { Background, Input, SubmitButton, SubmitText } from './styles';
 import { SafeAreaView, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 
 import Header from '../../components/Header'
 import RegisterTypes from '../../components/RegisterTypes';
-
+import { AuthContext } from '../../contexts/auth'
 import api from '../../services/api';
 import { format } from 'date-fns';
 import { useNavigation } from '@react-navigation/native';
 
 export default function New(){
   const navigation = useNavigation();
-
+  const { user } = useContext(AuthContext);
   const [labelInput, setLabelInput] = useState('');
   const [valueInput, setValueInput] = useState('');
   const [type, setType] = useState('receita');
@@ -46,12 +46,13 @@ export default function New(){
   async function handleAdd(){
     Keyboard.dismiss();
 
-    await api.post('/receive', {
+    await api.post('api/Receive', {
       description: labelInput,
       value: Number(valueInput),
       type: type,
-      date: format(new Date(), 'dd/MM/yyyy')
-    })
+      date: format(new Date(), 'dd/MM/yyyy'),
+      UserId: user.id
+    });
 
     setLabelInput('');
     setValueInput('');

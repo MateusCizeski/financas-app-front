@@ -22,14 +22,14 @@ function AuthProvider({ children }){
       if(storageUser){
         const response = await api.get({
           headers:{
-            'Authorization': `${storageUser}`
+            'Authorization': `Bearer ${storageUser}`
           }
         })
         .catch(()=>{
           setUser(null);
         })
 
-        api.defaults.headers['Authorization'] = `${storageUser}`;
+        api.defaults.headers['Authorization'] = `Bearer ${storageUser}`;
         if(response) {
           setUser(response.data);
         }
@@ -72,22 +72,22 @@ function AuthProvider({ children }){
         password: password
       });
 
-      const { Id, Name, Token } = response.data;
+      const { id, name, token } = response.data;
 
       const data = {
-        id: Id,
-        name: Name,
-        token: Token,
+        id,
+        name,
+        token,
         email,
       };
 
-      await AsyncStorage.setItem('@finToken', Token);
+      await AsyncStorage.setItem('@finToken', token);
 
-      api.defaults.headers['Authorization'] = `${Token}`;
+      api.defaults.headers['Authorization'] = `Bearer ${token}`;
 
       setUser({
-        Id,
-        Name,
+        id,
+        name,
         email,
       });
 
